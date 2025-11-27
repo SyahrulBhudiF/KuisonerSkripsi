@@ -14,6 +14,8 @@ import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SuccessIndexRouteImport } from './routes/success/index'
+import { Route as QuestionnaireIndexRouteImport } from './routes/questionnaire/index'
 import { Route as AuthedPostPostsRouteImport } from './routes/_authed/post/posts'
 import { Route as AuthedPostPostsIndexRouteImport } from './routes/_authed/post/posts.index'
 
@@ -41,6 +43,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SuccessIndexRoute = SuccessIndexRouteImport.update({
+  id: '/success/',
+  path: '/success/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestionnaireIndexRoute = QuestionnaireIndexRouteImport.update({
+  id: '/questionnaire/',
+  path: '/questionnaire/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthedPostPostsRoute = AuthedPostPostsRouteImport.update({
   id: '/post/posts',
   path: '/post/posts',
@@ -57,6 +69,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/questionnaire': typeof QuestionnaireIndexRoute
+  '/success': typeof SuccessIndexRoute
   '/post/posts': typeof AuthedPostPostsRouteWithChildren
   '/post/posts/': typeof AuthedPostPostsIndexRoute
 }
@@ -65,6 +79,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/questionnaire': typeof QuestionnaireIndexRoute
+  '/success': typeof SuccessIndexRoute
   '/post/posts': typeof AuthedPostPostsIndexRoute
 }
 export interface FileRoutesById {
@@ -74,6 +90,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/questionnaire/': typeof QuestionnaireIndexRoute
+  '/success/': typeof SuccessIndexRoute
   '/_authed/post/posts': typeof AuthedPostPostsRouteWithChildren
   '/_authed/post/posts/': typeof AuthedPostPostsIndexRoute
 }
@@ -84,10 +102,19 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/questionnaire'
+    | '/success'
     | '/post/posts'
     | '/post/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/logout' | '/signup' | '/post/posts'
+  to:
+    | '/'
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/questionnaire'
+    | '/success'
+    | '/post/posts'
   id:
     | '__root__'
     | '/'
@@ -95,6 +122,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/questionnaire/'
+    | '/success/'
     | '/_authed/post/posts'
     | '/_authed/post/posts/'
   fileRoutesById: FileRoutesById
@@ -105,6 +134,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   SignupRoute: typeof SignupRoute
+  QuestionnaireIndexRoute: typeof QuestionnaireIndexRoute
+  SuccessIndexRoute: typeof SuccessIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -142,6 +173,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/success/': {
+      id: '/success/'
+      path: '/success'
+      fullPath: '/success'
+      preLoaderRoute: typeof SuccessIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/questionnaire/': {
+      id: '/questionnaire/'
+      path: '/questionnaire'
+      fullPath: '/questionnaire'
+      preLoaderRoute: typeof QuestionnaireIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed/post/posts': {
@@ -191,6 +236,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   SignupRoute: SignupRoute,
+  QuestionnaireIndexRoute: QuestionnaireIndexRoute,
+  SuccessIndexRoute: SuccessIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

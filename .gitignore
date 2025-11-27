@@ -21,3 +21,6 @@ yarn.lock
 
 .idea
 .tanstack
+.vscode
+
+video_uploads
