@@ -8,3 +8,5 @@ export const submissionSchema = z.object({
   videoBase64Secondary: z.string(),
   answers: z.record(z.string(), z.string()),
 });
+
+export type submission = z.infer<typeof submissionSchema>;

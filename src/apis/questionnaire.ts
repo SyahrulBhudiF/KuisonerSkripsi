@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createServerFn } from "@tanstack/react-start";
-import { submissionSchema } from "@/libs/schemas/questionnaire";
+import { submission, submissionSchema } from "@/libs/schemas/questionnaire";
 import { getSupabaseServerClient } from "@/utils/supabase";
 
 export const getActiveQuestionnaire = createServerFn({ method: "GET" }).handler(
@@ -35,7 +35,7 @@ export const getActiveQuestionnaire = createServerFn({ method: "GET" }).handler(
           answer_text,
           score
         )
-      `,
+      `
       )
       .eq("questionnaire_id", questionnaire.id)
       .order("order_number", { ascending: true });
@@ -48,11 +48,11 @@ export const getActiveQuestionnaire = createServerFn({ method: "GET" }).handler(
       questionnaire,
       questions,
     };
-  },
+  }
 );
 
 export const submitQuestionnaire = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => submissionSchema.parse(data))
+  .inputValidator((data: submission) => submissionSchema.parse(data))
   .handler(async ({ data }) => {
     const supabase = getSupabaseServerClient();
 
@@ -73,7 +73,7 @@ export const submitQuestionnaire = createServerFn({ method: "POST" })
     const filePathMain = path.join(userFolder, "recording_main.webm");
     const bufferMain = Buffer.from(
       data.videoBase64Main.split(",")[1],
-      "base64",
+      "base64"
     );
 
     try {
@@ -90,7 +90,7 @@ export const submitQuestionnaire = createServerFn({ method: "POST" })
       filePathSecondary = path.join(userFolder, "recording_realsense.webm");
       const bufferSecondary = Buffer.from(
         data.videoBase64Secondary.split(",")[1],
-        "base64",
+        "base64"
       );
 
       try {
@@ -131,7 +131,7 @@ export const submitQuestionnaire = createServerFn({ method: "POST" })
     if (profileError) {
       if (profileError.message.includes("foreign key constraint")) {
         throw new Error(
-          "Database Error: Table 'profiles' linked to auth.users. Please remove Foreign Key constraint.",
+          "Database Error: Table 'profiles' linked to auth.users. Please remove Foreign Key constraint."
         );
       }
       throw new Error(`Failed to save profile: ${profileError.message}`);
