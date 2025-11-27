@@ -1,16 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createServerFn } from "@tanstack/react-start";
+import {
+  type finalSubmit,
+  finalSubmitSchema,
+  type uploadChunk,
+  uploadChunkSchema,
+} from "@/libs/schemas/questionnaire";
 import { getSupabaseServerClient } from "@/utils/supabase";
-import { z } from "zod";
-
-const uploadChunkSchema = z.object({
-  folderName: z.string(),
-  fileName: z.string(),
-  fileBase64: z.string(),
-});
-
-type uploadChunk = z.infer<typeof uploadChunkSchema>;
 
 export const uploadVideoChunk = createServerFn({ method: "POST" })
   .inputValidator((data: uploadChunk) => uploadChunkSchema.parse(data))
@@ -36,27 +33,10 @@ export const uploadVideoChunk = createServerFn({ method: "POST" })
         success: true,
         path: `/video_uploads/${data.folderName}/${data.fileName}`,
       };
-    } catch (e) {
+    } catch (_e) {
       throw new Error("Failed to save chunk");
     }
   });
-
-const finalSubmitSchema = z.object({
-  userName: z.string(),
-  userClass: z.string(),
-  questionnaireId: z.string(),
-  folderName: z.string(),
-  answers: z.array(
-    z.object({
-      questionId: z.string(),
-      answerId: z.string(),
-      videoMainPath: z.string(),
-      videoSecPath: z.string(),
-    })
-  ),
-});
-
-type finalSubmit = z.infer<typeof finalSubmitSchema>;
 
 export const submitSegmentedResponse = createServerFn({ method: "POST" })
   .inputValidator((data: finalSubmit) => finalSubmitSchema.parse(data))
